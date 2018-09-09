@@ -29,7 +29,6 @@ import com.kidscrafts.utilities.InjectorUtils
 import com.kidscrafts.viewmodels.GardenPlantingListViewModel
 
 class GardenFragment : Fragment() {
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
