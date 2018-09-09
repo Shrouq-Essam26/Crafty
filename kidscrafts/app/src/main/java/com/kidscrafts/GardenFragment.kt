@@ -42,6 +42,7 @@ class GardenFragment : Fragment() {
         return binding.root
     }
 
+
     private fun subscribeUi(adapter: GardenPlantingAdapter, binding: FragmentGardenBinding) {
         val factory = InjectorUtils.provideGardenPlantingListViewModelFactory(requireContext())
         val viewModel = ViewModelProviders.of(this, factory)
