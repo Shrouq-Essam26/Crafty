@@ -24,7 +24,7 @@ import android.support.v7.app.AppCompatActivity
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
-import com.kidscrafts.databinding.ActivityGardenBinding
+import com.kidscrafts.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,8 +33,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val binding: ActivityGardenBinding = DataBindingUtil.setContentView(this,
-                R.layout.activity_garden)
+        val binding: ActivityMainBinding = DataBindingUtil.setContentView(this,
+                R.layout.activity_main)
         drawerLayout = binding.drawerLayout
 
         val navController = Navigation.findNavController(this, R.id.main_nav_fragment)
