@@ -45,7 +45,7 @@
             </android.support.design.widget.AppBarLayout>
 
             <fragment
-                android:id="@+id/garden_nav_fragment"
+                android:id="@+id/main_nav_fragment"
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -26,7 +26,7 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.kidscrafts.databinding.ActivityGardenBinding
 
-class GardenActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
 
@@ -37,7 +37,7 @@ class GardenActivity : AppCompatActivity() {
                 R.layout.activity_garden)
         drawerLayout = binding.drawerLayout
 
-        val navController = Navigation.findNavController(this, R.id.garden_nav_fragment)
+        val navController = Navigation.findNavController(this, R.id.main_nav_fragment)
 
         // Set up ActionBar
         setSupportActionBar(binding.toolbar)
@@ -49,7 +49,7 @@ class GardenActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(drawerLayout,
-                Navigation.findNavController(this, R.id.garden_nav_fragment))
+                Navigation.findNavController(this, R.id.main_nav_fragment))
     }
 
     override fun onBackPressed() {
