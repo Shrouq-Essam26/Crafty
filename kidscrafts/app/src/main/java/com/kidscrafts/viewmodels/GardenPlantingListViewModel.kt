@@ -19,8 +19,15 @@ package com.kidscrafts.viewmodels
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
+import android.text.SpannableStringBuilder
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.view.View
+import android.widget.TextView
 import com.kidscrafts.data.GardenPlantingRepository
 import com.kidscrafts.data.PlantAndGardenPlantings
+
 
 class GardenPlantingListViewModel internal constructor(
     gardenPlantingRepository: GardenPlantingRepository
@@ -32,4 +39,28 @@ class GardenPlantingListViewModel internal constructor(
             Transformations.map(gardenPlantingRepository.getPlantAndGardenPlantings()) {
                 it.filter { it.gardenPlantings.isNotEmpty() }
             }
+
+
+    fun styleTextView(textView: TextView ,text: String, keyword: String) {
+
+        val spanText = SpannableStringBuilder()
+        spanText.append(text)
+        spanText.append(" ")
+        spanText.append(keyword)
+        spanText.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View) {
+
+            }
+
+            override fun updateDrawState(textPaint: TextPaint) {
+                textPaint.color = textPaint.linkColor    // you can use custom color
+                textPaint.isUnderlineText = false    // this remove the underline
+            }
+        }, spanText.length - keyword.length, spanText.length, 0)
+
+        textView.movementMethod = LinkMovementMethod.getInstance()
+        textView.setText(spanText, TextView.BufferType.SPANNABLE)
+
+    }
+
 }

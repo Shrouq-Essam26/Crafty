@@ -32,6 +32,7 @@
 
             <android.support.design.widget.AppBarLayout
                 android:id="@+id/appbar"
+                android:visibility="invisible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/AppTheme.AppBarOverlay">
@@ -50,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:defaultNavHost="true"
-                app:navGraph="@navigation/nav_garden"/>
+                app:navGraph="@navigation/nav_login"/>
 
         </LinearLayout>
 

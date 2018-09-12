@@ -23,7 +23,7 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
+import com.facebook.FacebookSdk
 import com.kidscrafts.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -38,14 +38,14 @@ class MainActivity : AppCompatActivity() {
                 R.layout.activity_main)
         drawerLayout = binding.drawerLayout
 
-        val navController = Navigation.findNavController(this, R.id.main_nav_fragment)
-
-        // Set up ActionBar
-        setSupportActionBar(binding.toolbar)
-        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
-
-        // Set up navigation menu
-        binding.navigationView.setupWithNavController(navController)
+//        val navController = Navigation.findNavController(this, R.id.main_nav_fragment)
+//
+//        // Set up ActionBar
+//        setSupportActionBar(binding.toolbar)
+//        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
+//
+//        // Set up navigation menu
+//        binding.navigationView.setupWithNavController(navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {
