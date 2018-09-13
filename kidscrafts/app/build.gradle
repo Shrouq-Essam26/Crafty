@@ -65,6 +65,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$rootProject.kotlinVersion"
     implementation "com.google.android.gms:play-services:$rootProject.playServicesVersion"
     implementation "com.facebook.android:facebook-android-sdk:$rootProject.facebookVersion"
+    implementation "com.google.firebase:firebase-auth:$rootProject.firebaseVersion"
     // Testing dependencies
     androidTestImplementation "com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion"
     androidTestImplementation "com.android.support.test.espresso:espresso-contrib:$rootProject.espressoVersion"
