@@ -1,19 +1,3 @@
-/*
- * Copyright 2018 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.kidscrafts
 
 import android.arch.lifecycle.Observer
@@ -21,28 +5,23 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.SpannableStringBuilder
+import android.text.TextPaint
+import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
-import com.facebook.AccessToken
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
-import com.facebook.login.LoginResult
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.kidscrafts.adapters.GardenPlantingAdapter
 import com.kidscrafts.databinding.FragmentLoginBinding
 import com.kidscrafts.utilities.InjectorUtils
-import com.kidscrafts.viewmodels.GardenPlantingListViewModel
+import com.kidscrafts.viewmodels.LoginFragmentViewModel
+
 
 class LoginFragment : Fragment() {
-
-    var callbackManager: CallbackManager? = null
-    var firebaseAuth: FirebaseAuth? = null
-    val TAG = "CreateAccount"
+    lateinit var viewModel: LoginFragmentViewModel;
+    private val TAG = LoginFragment::class.java.getSimpleName()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -50,74 +29,64 @@ class LoginFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentLoginBinding.inflate(inflater, container, false)
-        val adapter = GardenPlantingAdapter(binding.root.context)
-//        binding.gardenList.adapter = adapter
-
-
-        subscribeUi(adapter, binding)
+        initializeViewModel()
+        initializeViews(binding)
         return binding.root
     }
 
-    private fun subscribeUi(adapter: GardenPlantingAdapter, binding: FragmentLoginBinding) {
-        val factory = InjectorUtils.provideGardenPlantingListViewModelFactory(requireContext())
-        val viewModel = ViewModelProviders.of(this, factory)
-                .get(GardenPlantingListViewModel::class.java)
+    private fun initializeViewModel() {
+        val factory = InjectorUtils.provideLoginFragmentViewModelFactory(requireContext())
+        viewModel = ViewModelProviders.of(this, factory).get(LoginFragmentViewModel::class.java)
+    }
 
-        viewModel.gardenPlantings.observe(viewLifecycleOwner, Observer { plantings ->
-            binding.hasPlantings = (plantings != null && plantings.isNotEmpty())
-        })
-
-        viewModel.plantAndGardenPlantings.observe(viewLifecycleOwner, Observer { result ->
-            if (result != null && result.isNotEmpty())
-                adapter.submitList(result)
-        })
-
-        viewModel.styleTextView(binding.tvSignup, getString(R.string.do_not_have_account), getString(R.string.signup))
-        callbackManager = CallbackManager.Factory.create()
+    private fun initializeViews(binding: FragmentLoginBinding) {
+        binding.tvSignup.setText(getSignupText(getString(R.string.do_not_have_account), getString(R.string.signup)), TextView.BufferType.SPANNABLE)
+        binding.bFBLogin.registerCallback(viewModel.getFBCallbackManager(), viewModel.getFBCallback())
         binding.bFBLogin.setReadPermissions("email")
         binding.bFBLogin.setFragment(this)
-        // Callback registration
-        binding.bFBLogin.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
-            override fun onSuccess(loginResult: LoginResult) {
-                // App code
-                handleFacebookAccessToken(loginResult.accessToken)
-            }
-            override fun onCancel() {
-                // App code
-                Log.d(TAG, "handleFacebookAccessToken:")
-
-            }
-            override fun onError(exception: FacebookException) {
-                // App code
-                Log.d(TAG, "handleFacebookAccessToken:")
-
+        viewModel.getUser()?.observe(this, Observer {
+            if (it?.name != null) {
+                // Sign in success, update UI with the signed-in user's information
+                Toast.makeText(requireContext(), "signInWithCredential:success",
+                        Toast.LENGTH_SHORT).show()
+//                startActivity(Intent(requireContext(), MainActivity::class.java))
+            } else {
+                // If sign in fails, display a message to the user.
+                Log.w(TAG, "signInWithCredential:failure")
+                Toast.makeText(requireContext(), "Authentication failed.",
+                        Toast.LENGTH_SHORT).show()
             }
         })
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
-        callbackManager!!.onActivityResult(requestCode, resultCode, data)
-        //TODO
+        viewModel.getFBCallbackManager()!!.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun handleFacebookAccessToken(token: AccessToken) {
-        Log.d(TAG, "handleFacebookAccessToken:" + token)
-        val credential = FacebookAuthProvider.getCredential(token.token)
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseAuth!!.signInWithCredential(credential)
-                .addOnCompleteListener{ task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithCredential:success")
-                        val user = firebaseAuth!!.currentUser
-                        startActivity(Intent(requireContext(), MainActivity::class.java))
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithCredential:failure", task.getException())
-                        Toast.makeText(requireContext(), "Authentication failed.",
-                                Toast.LENGTH_SHORT).show()
-                    }
-                }
+//    region
+
+    fun getSignupText(text: String, keyword: String): SpannableStringBuilder {
+
+        val spanText = SpannableStringBuilder()
+        spanText.append(text)
+        spanText.append(" ")
+        spanText.append(keyword)
+        spanText.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View) {
+
+            }
+
+            override fun updateDrawState(textPaint: TextPaint) {
+                textPaint.color = textPaint.linkColor    // you can use custom color
+                textPaint.isUnderlineText = false    // this remove the underline
+            }
+        }, spanText.length - keyword.length, spanText.length, 0)
+
+        return spanText
+//        textView.movementMethod = LinkMovementMethod.getInstance()
+//        textView.setText(spanText, TextView.BufferType.SPANNABLE)
+
     }
+    // endregion
 }
