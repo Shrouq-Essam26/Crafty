@@ -18,50 +18,48 @@ import com.kidscrafts.dto.User
  * The ViewModel for [LoginFragment].
  */
 class LoginFragmentViewModel : ViewModel() {
+    private val TAG = LoginFragmentViewModel::class.java.getSimpleName()
 
     private var user = MutableLiveData<User>()
 
-    private var callbackManager: CallbackManager? = null
-    private var firebaseAuth: FirebaseAuth? = null
+    lateinit var firebaseAuth: FirebaseAuth
+    lateinit var callbackManager: CallbackManager
+    lateinit var facebookCallback: FacebookCallback<LoginResult>
 
-    private val TAG = LoginFragmentViewModel::class.java.getSimpleName()
 
     init {
+        firebaseAuth = FirebaseAuth.getInstance()
         callbackManager = CallbackManager.Factory.create()
+        facebookCallback = object : FacebookCallback<LoginResult> {
+            override fun onSuccess(loginResult: LoginResult) {
+                // App code
+                signup(loginResult.accessToken)
+            }
+
+            override fun onCancel() {
+                // App code
+            }
+
+            override fun onError(exception: FacebookException) {
+                // App code
+            }
+        }
     }
 
-    fun getUser() : LiveData<User> = user
+    fun getUser(): LiveData<User> = user
 
     fun getFBCallbackManager() = callbackManager
 
-    fun getFBCallback() = object : FacebookCallback<LoginResult> {
-        override fun onSuccess(loginResult: LoginResult) {
-            // App code
-            signup(loginResult.accessToken)
-        }
-
-        override fun onCancel() {
-            // App code
-        }
-
-        override fun onError(exception: FacebookException) {
-            // App code
-        }
-    }
+    fun getFBCallback() = facebookCallback
 
     private fun signup(token: AccessToken) {
         Log.d(TAG, "handleFacebookAccessToken:" + token)
         val credential = FacebookAuthProvider.getCredential(token.token)
-        firebaseAuth = FirebaseAuth.getInstance()
         firebaseAuth!!.signInWithCredential(credential)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        var tempUser : User = User(firebaseAuth!!.currentUser!!.displayName!! , firebaseAuth!!.currentUser!!.uid!!)
-                        user.value = tempUser
+                        user.value = User(firebaseAuth.currentUser?.displayName!!, firebaseAuth.currentUser?.uid!!)
                     }
-                    // else {
-//                        user = null
-//                    }
                 }
     }
 }

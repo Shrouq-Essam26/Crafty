@@ -20,8 +20,9 @@ import com.kidscrafts.viewmodels.LoginFragmentViewModel
 
 
 class LoginFragment : Fragment() {
-    lateinit var viewModel: LoginFragmentViewModel;
     private val TAG = LoginFragment::class.java.getSimpleName()
+
+    lateinit var viewModel: LoginFragmentViewModel;
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -44,12 +45,14 @@ class LoginFragment : Fragment() {
         binding.bFBLogin.registerCallback(viewModel.getFBCallbackManager(), viewModel.getFBCallback())
         binding.bFBLogin.setReadPermissions("email")
         binding.bFBLogin.setFragment(this)
-        viewModel.getUser()?.observe(this, Observer {
+        viewModel.getUser().observe(this, Observer {
             if (it?.name != null) {
                 // Sign in success, update UI with the signed-in user's information
                 Toast.makeText(requireContext(), "signInWithCredential:success",
                         Toast.LENGTH_SHORT).show()
-//                startActivity(Intent(requireContext(), MainActivity::class.java))
+
+//                val direction = LoginFragmentDirections.ActionLoginFragmentToPlantListFragment()
+//                findNavController().navigate(direction)
             } else {
                 // If sign in fails, display a message to the user.
                 Log.w(TAG, "signInWithCredential:failure")
@@ -61,7 +64,7 @@ class LoginFragment : Fragment() {
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
-        viewModel.getFBCallbackManager()!!.onActivityResult(requestCode, resultCode, data)
+        viewModel.getFBCallbackManager().onActivityResult(requestCode, resultCode, data)
     }
 
 //    region

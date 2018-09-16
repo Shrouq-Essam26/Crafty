@@ -1,4 +1,4 @@
 package com.kidscrafts.dto
 
-data class User (var name: String, var id: String){
+data class User (val name: String, val id: String){
 }

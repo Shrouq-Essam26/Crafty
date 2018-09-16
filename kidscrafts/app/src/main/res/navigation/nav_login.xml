@@ -18,13 +18,22 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@+id/login_fragment">
+    app:startDestination="@+id/plant_list_fragment">
 
     <fragment
         android:id="@+id/login_fragment"
         android:name="com.kidscrafts.LoginFragment"
         android:label="@string/login_title"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login" >
+
+        <action
+            android:id="@+id/action_login_fragment_to_plant_list_fragment"
+            app:destination="@id/plant_list_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/plant_list_fragment"
