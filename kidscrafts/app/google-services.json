@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "72629742194",
+    "firebase_url": "https://kidscrafts-7ac83.firebaseio.com",
+    "project_id": "kidscrafts-7ac83",
+    "storage_bucket": "kidscrafts-7ac83.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72629742194:android:dee72a0b705dbe18",
+        "android_client_info": {
+          "package_name": "com.kidscrafts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "72629742194-n6ck8e1krfbmaqbjtcss4885decj4hhf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYgrmcLD0rlJizYihvYb-6ATOKFmhH99o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
